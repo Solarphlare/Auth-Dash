@@ -130,7 +130,7 @@ export default function PasskeysView() {
     }, []);
 
     useEffect(() => {
-        setPasskeyButtonStyle(passkeysList.length >= 10 ? CapsuleButtonStyle.DISABLED : CapsuleButtonStyle.PRIMARY);
+        setPasskeyButtonStyle(passkeysList.length >= 8 ? CapsuleButtonStyle.DISABLED : CapsuleButtonStyle.PRIMARY);
     }, [passkeysList]);
 
     return (
