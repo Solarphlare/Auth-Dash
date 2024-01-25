@@ -1,4 +1,4 @@
-import headerIcon from "../../assets/headericon.png"
+import headerIcon from "../assets/headericon.png"
 
 export default function Navbar() {
     return (
