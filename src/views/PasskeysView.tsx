@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { CapsuleButton, CapsuleButtonStyle } from "../../Components/CapsuleButton";
-import Passkey from "../../Components/Passkey";
-import CreatePasskey from "../../PasskeyManagement/CreatePasskey";
-import { useDialog } from "../../ComponentContexts/DialogContext";
-import { useTextEntryDialog } from "../../ComponentContexts/TextEntryDialogContext";
+import { CapsuleButton, CapsuleButtonStyle } from "../Components/CapsuleButton";
+import Passkey from "../Components/Passkey";
+import CreatePasskey from "../PasskeyManagement/CreatePasskey";
+import { useDialog } from "../ComponentContexts/DialogContext";
+import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
 
 const GenericPasskeyUADict = [
     { ua: "iPhone OS", name: "iCloud Keychain" },

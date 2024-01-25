@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CapsuleButton, CapsuleButtonStyle } from "../../Components/CapsuleButton";
+import { CapsuleButton, CapsuleButtonStyle } from "../Components/CapsuleButton";
 import { APIUser } from "discord-api-types/v10";
 
 export default function AccountHeader() {
