@@ -45,5 +45,5 @@ export default async function CreatePasskey(showDialog: (options: ShowDialogProp
 
     const creationResponseBody: { id: string, name: string, created_at: string } = await creationResponse.json();
 
-    return creationResponseBody;
+    return {...creationResponseBody, transports: attestationResponse.response.transports ?? [] };
 }

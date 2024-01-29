@@ -23,6 +23,10 @@ export default function PasskeysView() {
 
         let passkeyName = GenericPasskeyUADict.find(i => navigator.userAgent.includes(i.ua))?.name ?? "";
 
+        if (!creationResponse.transports.includes("internal")) {
+            passkeyName = "";
+        }
+
         const existingNamesCount = passkeysList.filter(i => i.name === passkeyName).length;
         if (existingNamesCount > 0) {
             const proposedName = `${passkeyName} ${existingNamesCount + 1}`;
