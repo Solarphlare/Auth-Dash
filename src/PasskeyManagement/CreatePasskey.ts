@@ -30,7 +30,7 @@ export default async function CreatePasskey(showDialog: (options: ShowDialogProp
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(attestationResponse)
+            body: JSON.stringify({ attId: attestationOptions.attId, ...attestationResponse })
         });
     }
     catch {
