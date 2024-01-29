@@ -55,7 +55,8 @@ export default function PasskeysView() {
             }
 
             const newPasskeysList = [...passkeysList];
-            newPasskeysList.push({ id: creationResponse.id, name, created_at: creationResponse.created_at });
+            const insertIndex = newPasskeysList.findIndex(i => i.name.toLowerCase() > name.toLowerCase());
+            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: creationResponse.id, name, created_at: creationResponse.created_at });
             setPasskeysList(newPasskeysList);
         }});
     }
@@ -114,7 +115,11 @@ export default function PasskeysView() {
 
             const newPasskeysList = [...passkeysList];
             newPasskeysList.splice(newPasskeysList.findIndex(i => i.id === passkeyId), 1);
-            newPasskeysList.push({ id: passkeyId, name, created_at: responseJSON.created_at });
+
+            // insert the renamed passkey at the correct index alphabetically by name, case insensitive
+            const insertIndex = newPasskeysList.findIndex(i => i.name.toLowerCase() > name.toLowerCase());
+            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: passkeyId, name, created_at: responseJSON.created_at });
+
             setPasskeysList(newPasskeysList);
         }, onCancel: hideTextEntryDialog});
     }
