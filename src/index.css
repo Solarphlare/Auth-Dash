@@ -33,7 +33,7 @@ html, body, #root {
 }
 
 .dialog-box {
-  animation: ExpandIn 300ms ease-in-out;
+  animation: ExpandIn .25s linear;
 }
 
 .dialog-transform {
