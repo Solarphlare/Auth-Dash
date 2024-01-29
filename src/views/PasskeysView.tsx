@@ -135,11 +135,17 @@ export default function PasskeysView() {
 
             const passkeys = await passkeyData.json();
             setPasskeysList(passkeys);
+
+            if (window.PublicKeyCredential === undefined) {
+                setPasskeyButtonStyle(CapsuleButtonStyle.DISABLED);
+            }
         })();
     }, []);
 
     useEffect(() => {
-        setPasskeyButtonStyle(passkeysList.length >= 8 ? CapsuleButtonStyle.DISABLED : CapsuleButtonStyle.PRIMARY);
+        if (window.PublicKeyCredential !== undefined) {
+            setPasskeyButtonStyle(passkeysList.length >= 8 ? CapsuleButtonStyle.DISABLED : CapsuleButtonStyle.PRIMARY);
+        }
     }, [passkeysList]);
 
     return (
