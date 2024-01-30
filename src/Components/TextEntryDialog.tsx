@@ -24,7 +24,7 @@ export default function TextEntryDialog() {
             </div>
             <div className="px-6 flex gap-2" id="dialog-button-container">
                 <button type="button" tabIndex={1} onClick={onCancel} className={`${isCancelable ? "" : "hidden"} dark:text-neutral-200 focus:outline-none lg:dark:hover:text-black bg-neutral-400/30 dark:bg-zinc-500/40 lg:bg-neutral-400/40 lg:dark:bg-zinc-500/50 py-1.5 w-full font-semibold rounded-[10px] lg:hover:scale-105 lg:hover:bg-white lg:hover:shadow-lg ease-in-out duration-300 lg:active:scale-100 active:scale-90 lg:active:shadow-none`}>Cancel</button>
-                <button disabled={currentValue.length === 0} tabIndex={2} type="button" onClick={() => onConfirm(currentValue)} className={`dark:text-neutral-200 focus:outline-none ${currentValue.length > 0 ? "" : "pointer-events-none opacity-40"} bg-neutral-400/30 dark:bg-zinc-500/40 lg:bg-neutral-400/40 lg:dark:bg-zinc-500/50 py-1.5 w-full font-semibold rounded-[10px] lg:hover:scale-105 lg:hover:bg-white lg:hover:shadow-lg ease-in-out duration-300 lg:active:scale-100 active:scale-90 lg:active:shadow-none`}>OK</button>
+                <button disabled={currentValue.length === 0} tabIndex={2} type="button" onClick={() => onConfirm(currentValue)} className={`dark:text-neutral-200 focus:outline-none ${currentValue.length > 0 ? "" : "pointer-events-none opacity-40"} bg-neutral-400/30 dark:bg-zinc-500/40 lg:bg-neutral-400/40 lg:dark:hover:text-black lg:dark:bg-zinc-500/50 py-1.5 w-full font-semibold rounded-[10px] lg:hover:scale-105 lg:hover:bg-white lg:hover:shadow-lg ease-in-out duration-300 lg:active:scale-100 active:scale-90 lg:active:shadow-none`}>OK</button>
             </div>
         </div>
     </div>
