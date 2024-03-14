@@ -151,7 +151,7 @@ export default function PasskeysView() {
     return (
         <div className="flex flex-col md:flex-row justify-center md:justify-between items-start gap-8 md:gap-0 w-full select-none">
             <div className="flex flex-col max-w-[28rem] gap-6">
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-1">
                     <h1 className="text-2xl font-bold dark:text-white transition duration-200">Passkeys</h1>
                     <p className="dark:text-white/50 text-black/50 transition duration-200 md:pr-8">Passkeys are a simpler and more secure way to log into your account using only your device's biometrics or credentials.</p>
                 </div>
