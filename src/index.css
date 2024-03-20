@@ -7,7 +7,7 @@
   --webkit-tap-color: transparent;
 }
 
-*:not(body, .passkey-container) {
+*:not(body, .passkey-container, .transition, .transition-all) {
   transition-property: width, height, opacity, margin, background-color, padding, left, top, font-size, line-height, transform, filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
