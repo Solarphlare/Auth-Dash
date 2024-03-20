@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { CapsuleButton, CapsuleButtonStyle } from "../Components/CapsuleButton";
 import Passkey from "../Components/Passkey";
+import { Flipper, Flipped } from "react-flip-toolkit";
 import CreatePasskey from "../PasskeyManagement/CreatePasskey";
 import { useDialog } from "../ComponentContexts/DialogContext";
 import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
@@ -151,7 +152,7 @@ export default function PasskeysView() {
     return (
         <div className="flex flex-col md:flex-row justify-center md:justify-between items-start gap-8 md:gap-0 w-full select-none">
             <div className="flex flex-col max-w-[28rem] gap-6">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col">
                     <h1 className="text-2xl font-bold dark:text-white transition duration-200">Passkeys</h1>
                     <p className="dark:text-white/50 text-black/50 transition duration-200 md:pr-8">Passkeys are a simpler and more secure way to log into your account using only your device's biometrics or credentials.</p>
                 </div>
@@ -166,15 +167,15 @@ export default function PasskeysView() {
             </div>
             <div className="flex flex-col gap-2 w-full md:w-auto">
                 <h3 className={`text-black/50 dark:text-white/50 text-sm md:ml-4 ml-1 font-semibold ${passkeysList.length === 0 ? "hidden" : ""}`}>Your Passkeys</h3>
-                <div className="flex flex-col gap-2.5">
-                    {
-                        passkeysList.map(passkey => {
-                            return (
-                                <Passkey key={passkey.id} {...passkey} creationDate={new Date(passkey.created_at)} onRename={onPasskeyRenameClick} onDelete={onPasskeyDeleteClick} />
-                            )
-                        })
-                    }
-                </div>
+                    <Flipper flipKey={passkeysList.map(i => `${i.name}-${i.id}` ).join("")} className="flex flex-col gap-2.5">
+                        {
+                            passkeysList.map(passkey => (
+                                <Flipped key={passkey.id} flipId={`${passkey.name}-${passkey.id}`}>
+                                    {flippedProps => <Passkey {...passkey} creationDate={new Date(passkey.created_at)} flippedProps={flippedProps} onRename={onPasskeyRenameClick} onDelete={onPasskeyDeleteClick} />}
+                                </Flipped>
+                            ))
+                        }
+                    </Flipper>
             </div>
         </div>
     )
