@@ -7,7 +7,7 @@
   --webkit-tap-color: transparent;
 }
 
-*:not(body, .passkey-container, .transition, .transition-all, button) {
+*:not(body, .transition, .transition-all, button) {
   transition-property: width, height, opacity, margin, background-color, padding, left, top, font-size, line-height, transform, filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
@@ -20,6 +20,11 @@ html, body, #root {
 
 .account-profile-img {
   background-image: url("https://api.cominatyou.com/users/me/avatar");
+  background-size: contain;
+}
+
+.header-nav-button {
+  background-image: url("/src/assets/headericon.png");
   background-size: contain;
 }
 

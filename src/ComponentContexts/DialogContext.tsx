@@ -24,7 +24,7 @@ interface DialogStateProps extends ShowDialogProps {
 }
 
 interface DialogContextProps extends DialogStateProps {
-    showDialog: (_options: ShowDialogProps) => void;
+    showDialog: (options: ShowDialogProps) => void;
     hideDialog: () => void;
 }
 

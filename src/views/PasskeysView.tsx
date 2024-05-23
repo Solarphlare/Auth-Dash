@@ -13,7 +13,7 @@ const GenericPasskeyUADict = [
 ];
 
 export default function PasskeysView() {
-    const [passkeyButtonStyle, setPasskeyButtonStyle] = useState(CapsuleButtonStyle.PRIMARY);
+    const [passkeyButtonStyle, setPasskeyButtonStyle] = useState(CapsuleButtonStyle.DISABLED);
     const [passkeysList, setPasskeysList] = useState<{ id: string, name: string, created_at: string }[]>([]);
     const { showDialog, hideDialog } = useDialog();
     const { showTextEntryDialog, hideTextEntryDialog } = useTextEntryDialog();
@@ -44,7 +44,7 @@ export default function PasskeysView() {
 
             let renameResponse: Response;
             try {
-                renameResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+                renameResponse = await fetch(`https://api.cominatyou.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
             }
             catch {
                 showDialog({ title: "Failed to rename passkey", body: "Something happened while trying to rename your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
@@ -75,16 +75,15 @@ export default function PasskeysView() {
                 deleteResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${passkeyId}`, { method: "DELETE", credentials: 'same-origin' });
             }
             catch {
-                showDialog({ title: "Failed to delete passkey", body: "Something happened while trying to delete your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
-                return;
+                return showDialog({ title: "Failed to delete passkey", body: "Something happened while trying to delete your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
             }
 
             if (!deleteResponse.ok) {
                 if (deleteResponse.status >= 400 && deleteResponse.status < 500) {
                     const message = await deleteResponse.json();
-                    showDialog({ title: "Failed to delete passkey", body:  message.error_message, primaryButton: "OK" , confirmAction: hideDialog });
+                    return showDialog({ title: "Failed to delete passkey", body:  message.error_message, primaryButton: "OK" , confirmAction: hideDialog });
                 }
-                return;
+                else return showDialog({ title: "Failed to delete passkey", body: "Something happened while trying to delete your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
             }
 
             const newPasskeysList = [...passkeysList];
@@ -151,7 +150,7 @@ export default function PasskeysView() {
 
     return (
         <div className="flex flex-col md:flex-row justify-center md:justify-between items-start gap-8 md:gap-0 w-full select-none">
-            <div className="flex flex-col max-w-[28rem] gap-6">
+            <div className="flex flex-col max-w-md gap-6">
                 <div className="flex flex-col gap-1">
                     <h1 className="text-2xl font-bold dark:text-white transition duration-200">Passkeys</h1>
                     <p className="dark:text-white/50 text-black/50 transition duration-200 md:pr-8">Passkeys are a simpler and more secure way to log into your account using only your device's biometrics or credentials.</p>
@@ -159,7 +158,7 @@ export default function PasskeysView() {
                 <div className="mx-[-4px]">
                     <CapsuleButton onClick={onPasskeyCreateClick} style={passkeyButtonStyle}>
                         <div className="flex justify-center items-center gap-1 mr-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" className={ `${passkeyButtonStyle === CapsuleButtonStyle.DISABLED ? "" : "invert"} dark:invert-0` } height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`transition duration-200 ${passkeyButtonStyle === CapsuleButtonStyle.DISABLED ? "dark:fill-white" : "dark:fill-black fill-white"}`} height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
                             Add a Passkey
                         </div>
                     </CapsuleButton>
@@ -167,15 +166,15 @@ export default function PasskeysView() {
             </div>
             <div className="flex flex-col gap-2 w-full md:w-auto">
                 <h3 className={`text-black/50 dark:text-white/50 text-sm md:ml-4 ml-1 font-semibold ${passkeysList.length === 0 ? "hidden" : ""}`}>Your Passkeys</h3>
-                    <Flipper flipKey={passkeysList.map(i => `${i.name}-${i.id}` ).join("")} className="flex flex-col gap-2.5">
-                        {
-                            passkeysList.map(passkey => (
-                                <Flipped key={passkey.id} flipId={`${passkey.name}-${passkey.id}`}>
-                                    {flippedProps => <Passkey {...passkey} creationDate={new Date(passkey.created_at)} flippedProps={flippedProps} onRename={onPasskeyRenameClick} onDelete={onPasskeyDeleteClick} />}
-                                </Flipped>
-                            ))
-                        }
-                    </Flipper>
+                <Flipper flipKey={passkeysList.map(i => `${i.name}-${i.id}` ).join("")} className="flex flex-col gap-2.5">
+                    {
+                        passkeysList.map(passkey => (
+                            <Flipped key={passkey.id} flipId={`${passkey.name}-${passkey.id}`}>
+                                {flippedProps => <Passkey {...passkey} creationDate={new Date(passkey.created_at)} flippedProps={flippedProps} onRename={onPasskeyRenameClick} onDelete={onPasskeyDeleteClick} />}
+                            </Flipped>
+                        ))
+                    }
+                </Flipper>
             </div>
         </div>
     )
