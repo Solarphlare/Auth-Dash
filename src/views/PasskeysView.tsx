@@ -44,7 +44,7 @@ export default function PasskeysView() {
 
             let renameResponse: Response;
             try {
-                renameResponse = await fetch(`https://api.cominatyou.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+                renameResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
             }
             catch {
                 showDialog({ title: "Failed to rename passkey", body: "Something happened while trying to rename your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
