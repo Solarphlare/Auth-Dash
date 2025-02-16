@@ -33,8 +33,8 @@ export default function Session({ session, onDelete, flippedProps = undefined, d
                     {getIcon(session.device)}
                 </div>
                 <div className="flex flex-col text-left overflow-hidden">
-                    <p className="font-semibold dark:text-white transition-all duration-200 passkey-title max-w-48 whitespace-nowrap overflow-hidden text-ellipsis">{session.device}</p>
-                    <p className="text-sm text-black/40 dark:text-white/40 transition-all duration-200 overflow-hidden text-ellipsis whitespace-nowrap max-w-48">{session.location}</p>
+                    <p className="font-semibold dark:text-white transition-all duration-200 passkey-title max-w-[13rem] whitespace-nowrap overflow-hidden text-ellipsis">{session.device}</p>
+                    <p className="text-sm text-black/40 dark:text-white/40 transition-all duration-200 overflow-hidden text-ellipsis whitespace-nowrap max-w-[13rem]">{session.location}</p>
                     {deletable && <p className="text-sm text-black/40 dark:text-white/40 transition-all duration-200">Last seen {timeAgo.format(new Date(session.last_seen))}</p>}
                 </div>
             </div>
