@@ -5,6 +5,8 @@ import { Flipper, Flipped } from "react-flip-toolkit";
 import CreatePasskey from "../PasskeyManagement/CreatePasskey";
 import { useDialog } from "../ComponentContexts/DialogContext";
 import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
+import { APIUser } from "discord-api-types/v10";
+import { bufferToBase64URLString } from "@simplewebauthn/browser";
 
 const GenericPasskeyUADict = [
     { ua: "iPhone OS", name: "iCloud Keychain" },
@@ -12,7 +14,7 @@ const GenericPasskeyUADict = [
     { ua: "Windows NT 10.0", name: "Windows Hello" }
 ];
 
-export default function PasskeysView() {
+export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
     const [passkeyButtonStyle, setPasskeyButtonStyle] = useState(CapsuleButtonStyle.DISABLED);
     const [passkeysList, setPasskeysList] = useState<{ id: string, name: string, created_at: string }[]>([]);
     const { showDialog, hideDialog } = useDialog();
@@ -44,7 +46,7 @@ export default function PasskeysView() {
 
             let renameResponse: Response;
             try {
-                renameResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+                renameResponse = await fetch(`https://auth.solarphlare.com/users/me/public-keys/${creationResponse.id}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
             }
             catch {
                 showDialog({ title: "Failed to rename passkey", body: "Something happened while trying to rename your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
@@ -72,7 +74,7 @@ export default function PasskeysView() {
 
             let deleteResponse: Response;
             try {
-                deleteResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${passkeyId}`, { method: "DELETE", credentials: 'same-origin' });
+                deleteResponse = await fetch(`https://auth.solarphlare.com/users/me/public-keys/${passkeyId}`, { method: "DELETE", credentials: 'same-origin' });
             }
             catch {
                 return showDialog({ title: "Failed to delete passkey", body: "Something happened while trying to delete your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
@@ -90,6 +92,16 @@ export default function PasskeysView() {
             const passkeyIndex = newPasskeysList.findIndex(i => i.id === passkeyId);
             newPasskeysList.splice(passkeyIndex, 1);
             setPasskeysList(newPasskeysList);
+
+            // @ts-expect-error signalAllAcceptedCredentials doesn't exist in the type definitions yet
+            if (PublicKeyCredential.signalAllAcceptedCredentials) {
+                // @ts-expect-error signalAllAcceptedCredentials doesn't exist in the type definitions yet
+                await PublicKeyCredential.signalAllAcceptedCredentials({
+                    rpId: "solarphlare.com",
+                    userId: bufferToBase64URLString(new TextEncoder().encode(userInfo.id)),
+                    allAcceptedCredentialIds: [...newPasskeysList.map(i => i.id)]
+                });
+            }
         }});
     }
 
@@ -100,7 +112,7 @@ export default function PasskeysView() {
 
             let renameResponse: Response;
             try {
-                renameResponse = await fetch(`https://auth.cominatyou.com/users/me/public-keys/${passkeyId}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+                renameResponse = await fetch(`https://auth.solarphlare.com/users/me/public-keys/${passkeyId}`, { method: "PATCH", credentials: 'same-origin', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
             }
             catch {
                 showDialog({ title: "Failed to rename passkey", body: "Something happened while trying to rename your passkey. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
@@ -130,7 +142,7 @@ export default function PasskeysView() {
 
     useEffect(() => {
         (async () => {
-            const passkeyData = await fetch("https://api.cominatyou.com/users/me/public-keys", { credentials: 'include' });
+            const passkeyData = await fetch("https://api.solarphlare.com/users/me/public-keys", { credentials: 'include' });
             if (!passkeyData.ok) return console.error("Failed to fetch passkeys");
 
             const passkeys = await passkeyData.json();

@@ -11,7 +11,7 @@ export default function SessionsView() {
 
     useEffect(() => {
         (async () => {
-            const sessionsRequest = await fetch("https://api.cominatyou.com/users/me/sessions", { credentials: 'include' });
+            const sessionsRequest = await fetch("https://api.solarphlare.com/users/me/sessions", { credentials: 'include' });
 
             if (!sessionsRequest.ok) {
                 return console.error("Failed to fetch sessions");
@@ -35,7 +35,7 @@ export default function SessionsView() {
 
                 let deleteResponse: Response;
                 try {
-                    deleteResponse = await fetch(`https://auth.cominatyou.com/users/me/sessions/${sessionId}`, { method: 'DELETE', credentials: 'include' });
+                    deleteResponse = await fetch(`https://auth.solarphlare.com/users/me/sessions/${sessionId}`, { method: 'DELETE', credentials: 'include' });
                 }
                 catch (e) {
                     console.error(e);

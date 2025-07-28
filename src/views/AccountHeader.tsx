@@ -2,21 +2,22 @@ import { useEffect, useState } from "react";
 import { CapsuleButton, CapsuleButtonStyle } from "../Components/CapsuleButton";
 import { APIUser } from "discord-api-types/v10";
 
-export default function AccountHeader() {
+export default function AccountHeader({ setUserInfo }: { setUserInfo: (userInfo: APIUser) => void }) {
     const [displayName, setDisplayName] = useState("");
     const [username, setUsername] = useState("");
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("https://api.cominatyou.com/users/me", { credentials: 'include' });
+            const res = await fetch("https://api.solarphlare.com/users/me", { credentials: 'include' });
             const data: APIUser = await res.json();
 
             if (!res.ok) return console.error(data);
 
             setDisplayName(data.global_name ?? data.username);
             setUsername(data.username);
+            setUserInfo(data);
         })();
-    });
+    }, [setUserInfo]);
 
     return (
         <div className="flex justify-between w-full">

@@ -4,7 +4,7 @@ import { ShowDialogProps } from "../ComponentContexts/DialogContext";
 export default async function CreatePasskey(showDialog: (options: ShowDialogProps) => void, hideDialog: () => void) {
     let passkeyCreateOptions: Response;
     try {
-        passkeyCreateOptions = await fetch("https://auth.cominatyou.com/auth/public-key/create-registration-options", {
+        passkeyCreateOptions = await fetch("https://auth.solarphlare.com/auth/public-key/create-registration-options", {
             method: "POST",
             credentials: "same-origin"
         });
@@ -24,7 +24,7 @@ export default async function CreatePasskey(showDialog: (options: ShowDialogProp
 
     let creationResponse: Response;
     try {
-        creationResponse = await fetch("https://auth.cominatyou.com/auth/public-key/register", {
+        creationResponse = await fetch("https://auth.solarphlare.com/auth/public-key/register", {
             method: "POST",
             credentials: "same-origin",
             headers: {
