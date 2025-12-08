@@ -6,7 +6,7 @@ import CreatePasskey from "../PasskeyManagement/CreatePasskey";
 import { useDialog } from "../ComponentContexts/DialogContext";
 import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
 import { APIUser } from "discord-api-types/v10";
-import { bufferToBase64URLString } from "@simplewebauthn/browser";
+import { bufferToBase64URLString, base64URLStringToBuffer } from "@simplewebauthn/browser";
 
 const GenericPasskeyUADict = [
     { ua: "iPhone OS", name: "iCloud Keychain" },
@@ -99,7 +99,7 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
                 await PublicKeyCredential.signalAllAcceptedCredentials({
                     rpId: "solarphlare.com",
                     userId: bufferToBase64URLString(new TextEncoder().encode(userInfo.id).buffer),
-                    allAcceptedCredentialIds: [...newPasskeysList.map(i => i.id)]
+                    allAcceptedCredentialIds: [...newPasskeysList.map(i => base64URLStringToBuffer(i.id))]
                 });
             }
         }});
