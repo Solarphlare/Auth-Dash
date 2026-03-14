@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="w-full h-[100vh] bg-neutral-100/60 dark:bg-zinc-900 flex flex-col">
       <Navbar />
-      <div className='flex flex-col items-center flex-1 bg-neutral-100/60 dark:bg-zinc-900 px-6 2xl:px-96 xl:px-48 lg:px-28 md:px-8 pt-28' id="content">
+      <div className='flex flex-col items-center flex-1 bg-neutral-100/60 dark:bg-zinc-900 px-6 2xl:px-64 xl:px-48 lg:px-28 md:px-8 pt-28' id="content">
         <AccountHeader setUserInfo={setUserInfo} />
         <HorizontalSeparator />
         <PasskeysView userInfo={userInfo} />
