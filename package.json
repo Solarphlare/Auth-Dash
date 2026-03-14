@@ -18,6 +18,7 @@
     "react-flip-toolkit": "^7.1.0"
   },
   "devDependencies": {
+    "@types/cloudflare-turnstile": "^0.2.2",
     "@types/javascript-time-ago": "^2.0.8",
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.43",
