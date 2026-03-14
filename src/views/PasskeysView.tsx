@@ -7,6 +7,7 @@ import { useDialog } from "../ComponentContexts/DialogContext";
 import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
 import { APIUser } from "discord-api-types/v10";
 import { bufferToBase64URLString, base64URLStringToBuffer } from "@simplewebauthn/browser";
+import loadingIcon from "../assets/loading.png";
 
 const GenericPasskeyUADict = [
     { ua: "iPhone OS", name: "iCloud Keychain" },
@@ -19,9 +20,12 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
     const [passkeysList, setPasskeysList] = useState<{ id: string, name: string, created_at: string }[]>([]);
     const { showDialog, hideDialog } = useDialog();
     const { showTextEntryDialog, hideTextEntryDialog } = useTextEntryDialog();
+    const [isPasskeyBeingCreated, setIsPasskeyBeingCreated] = useState(false);
 
     async function onPasskeyCreateClick() {
+        setIsPasskeyBeingCreated(true);
         const creationResponse = await CreatePasskey(showDialog, hideDialog);
+        setIsPasskeyBeingCreated(false);
         if (!creationResponse) return;
 
         let passkeyName = GenericPasskeyUADict.find(i => navigator.userAgent.includes(i.ua))?.name ?? "";
@@ -170,7 +174,11 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
                 <div className="mx-[-4px]">
                     <CapsuleButton onClick={onPasskeyCreateClick} style={passkeyButtonStyle}>
                         <div className="flex justify-center items-center gap-1 mr-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" className={`transition duration-200 ${passkeyButtonStyle === CapsuleButtonStyle.DISABLED ? "dark:fill-white" : "dark:fill-black fill-white"}`} height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
+                            {isPasskeyBeingCreated ?
+                                <div className="transition duration-200 w-6 h-6 flex flex-col justify-center items-center"><img src={loadingIcon} className="w-4 h-4 invert dark:invert-0" /></div>
+                                :
+                                <svg xmlns="http://www.w3.org/2000/svg" className={`transition duration-200 ${passkeyButtonStyle === CapsuleButtonStyle.DISABLED ? "dark:fill-white" : "dark:fill-black fill-white"}`} height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
+                            }
                             Add a Passkey
                         </div>
                     </CapsuleButton>

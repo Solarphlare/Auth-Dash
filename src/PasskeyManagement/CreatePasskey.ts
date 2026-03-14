@@ -1,12 +1,27 @@
 import { startRegistration } from "@simplewebauthn/browser";
 import { ShowDialogProps } from "../ComponentContexts/DialogContext";
+import turnstileRender from "../util/turnstile";
+import { RegistrationResponseJSON } from '@simplewebauthn/typescript-types';
 
 export default async function CreatePasskey(showDialog: (options: ShowDialogProps) => void, hideDialog: () => void) {
+    let registrationOptsToken: string
+    try {
+        registrationOptsToken = await turnstileRender("#root", {
+            sitekey: "0x4AAAAAABoB88S_MNbuZG5w"
+        });
+    }
+    catch (e) {
+        showDialog({ title: "Failed to process request", body: "Something happened while we were trying to process your request. Give it another shot, or try again later.", primaryButton: "OK", confirmAction: hideDialog });
+        return;
+    }
+
     let passkeyCreateOptions: Response;
     try {
         passkeyCreateOptions = await fetch("https://auth.solarphlare.com/auth/public-key/create-registration-options", {
             method: "POST",
-            credentials: "same-origin"
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ turnstileToken: registrationOptsToken })
         });
     }
     catch {
@@ -20,7 +35,14 @@ export default async function CreatePasskey(showDialog: (options: ShowDialogProp
     }
 
     const attestationOptions = await passkeyCreateOptions.json();
-    const attestationResponse =  await startRegistration(attestationOptions);
+    let attestationResponse: RegistrationResponseJSON;
+
+    try {
+        attestationResponse = await startRegistration(attestationOptions);
+    }
+    catch (e) {
+        return;
+    }
 
     let creationResponse: Response;
     try {
