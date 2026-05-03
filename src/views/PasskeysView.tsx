@@ -97,13 +97,11 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
             newPasskeysList.splice(passkeyIndex, 1);
             setPasskeysList(newPasskeysList);
 
-            // @ts-expect-error signalAllAcceptedCredentials doesn't exist in the type definitions yet
             if (PublicKeyCredential.signalAllAcceptedCredentials) {
-                // @ts-expect-error signalAllAcceptedCredentials doesn't exist in the type definitions yet
                 await PublicKeyCredential.signalAllAcceptedCredentials({
                     rpId: "solarphlare.com",
                     userId: bufferToBase64URLString(new TextEncoder().encode(userInfo.id).buffer),
-                    allAcceptedCredentialIds: [...newPasskeysList.map(i => base64URLStringToBuffer(i.id))]
+                    allAcceptedCredentialIds: newPasskeysList.map(i => i.id)
                 });
             }
         }});
