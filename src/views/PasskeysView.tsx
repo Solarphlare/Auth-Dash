@@ -6,18 +6,13 @@ import CreatePasskey from "../PasskeyManagement/CreatePasskey";
 import { useDialog } from "../ComponentContexts/DialogContext";
 import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext";
 import { APIUser } from "discord-api-types/v10";
-import { bufferToBase64URLString, base64URLStringToBuffer } from "@simplewebauthn/browser";
+import { bufferToBase64URLString } from "@simplewebauthn/browser";
 import loadingIcon from "../assets/loading.png";
-
-const GenericPasskeyUADict = [
-    { ua: "iPhone OS", name: "iCloud Keychain" },
-    { ua: "Mac OS X", name: "iCloud Keychain" },
-    { ua: "Windows NT 10.0", name: "Windows Hello" }
-];
+import aaguids from "../Types/AAGUIDCollection";
 
 export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
     const [passkeyButtonStyle, setPasskeyButtonStyle] = useState(CapsuleButtonStyle.DISABLED);
-    const [passkeysList, setPasskeysList] = useState<{ id: string, name: string, created_at: string }[]>([]);
+    const [passkeysList, setPasskeysList] = useState<{ id: string, name: string, created_at: string, aaguid: string }[]>([]);
     const { showDialog, hideDialog } = useDialog();
     const { showTextEntryDialog, hideTextEntryDialog } = useTextEntryDialog();
     const [isPasskeyBeingCreated, setIsPasskeyBeingCreated] = useState(false);
@@ -28,10 +23,10 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
         setIsPasskeyBeingCreated(false);
         if (!creationResponse) return;
 
-        let passkeyName = GenericPasskeyUADict.find(i => navigator.userAgent.includes(i.ua))?.name ?? "";
+        let passkeyName = ""
 
-        if (!creationResponse.transports.includes("internal")) {
-            passkeyName = "";
+        if (aaguids[creationResponse.aaguid]) {
+            passkeyName = aaguids[creationResponse.aaguid].name;
         }
 
         const existingNamesCount = passkeysList.filter(i => i.name === passkeyName).length;
@@ -67,7 +62,7 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
 
             const newPasskeysList = [...passkeysList];
             const insertIndex = newPasskeysList.findIndex(i => i.name.toLowerCase() > name.toLowerCase());
-            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: creationResponse.id, name, created_at: creationResponse.created_at });
+            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: creationResponse.id, name, created_at: creationResponse.created_at, aaguid: creationResponse.aaguid });
             setPasskeysList(newPasskeysList);
         }});
     }
@@ -136,7 +131,7 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
 
             // insert the renamed passkey at the correct index alphabetically by name, case insensitive
             const insertIndex = newPasskeysList.findIndex(i => i.name.toLowerCase() > name.toLowerCase());
-            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: passkeyId, name, created_at: responseJSON.created_at });
+            newPasskeysList.splice(insertIndex === -1 ? newPasskeysList.length : insertIndex, 0, { id: passkeyId, name, created_at: responseJSON.created_at, aaguid: responseJSON.aaguid });
 
             setPasskeysList(newPasskeysList);
         }, onCancel: hideTextEntryDialog});

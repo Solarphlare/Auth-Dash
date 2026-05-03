@@ -1,8 +1,16 @@
-export default function Passkey({ name, id, creationDate, flippedProps, onRename, onDelete }: { name: string, id: string, creationDate: Date, flippedProps: object, onRename: (passkeyId: string) => void, onDelete: (passkeyId: string) => void }) {
+import aaguids from "../Types/AAGUIDCollection";
+import { useMediaQuery } from "../util/useMediaQuery";
+
+export default function Passkey({ name, id, creationDate, aaguid, flippedProps, onRename, onDelete }: { name: string, id: string, creationDate: Date, aaguid: string, flippedProps: object, onRename: (passkeyId: string) => void, onDelete: (passkeyId: string) => void }) {
+    const icon = aaguids[aaguid];
+    const isDark = useMediaQuery("(prefers-color-scheme: dark)");
+
     return (
         <div className="passkey-container py-4 px-6 flex bg-neutral-200 dark:bg-zinc-700 shadow justify-between items-center rounded-3xl md:max-w-[22rem] md:min-w-[22rem] w-full" {...flippedProps}>
             <div className="flex gap-4 items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" id="Passkey" viewBox="0 0 24 24" width="38" height="38" className="dark:fill-white transition-all duration-200 mt-1"><g><circle cx="10.5" cy="6" r="4.5"/><path d="M22.5,10.5a3.5,3.5,0,1,0-5,3.15V19L19,20.5,21.5,18,20,16.5,21.5,15l-1.24-1.24A3.5,3.5,0,0,0,22.5,10.5Zm-3.5,0a1,1,0,1,1,1-1A1,1,0,0,1,19,10.5Z"/><path d="M14.44,12.52A6,6,0,0,0,12,12H9a6,6,0,0,0-6,6v2H16V14.49A5.16,5.16,0,0,1,14.44,12.52Z" /></g></svg>
+                {
+                    icon && icon.icon_dark ? <img src={isDark ? icon.icon_dark : icon.icon_light} alt="Passkey Icon" width={38} height={38} className="mt-1" /> : <svg xmlns="http://www.w3.org/2000/svg" id="Passkey" viewBox="0 0 24 24" width="38" height="38" className="dark:fill-white transition-all duration-200 mt-1"><g><circle cx="10.5" cy="6" r="4.5"/><path d="M22.5,10.5a3.5,3.5,0,1,0-5,3.15V19L19,20.5,21.5,18,20,16.5,21.5,15l-1.24-1.24A3.5,3.5,0,0,0,22.5,10.5Zm-3.5,0a1,1,0,1,1,1-1A1,1,0,0,1,19,10.5Z"/><path d="M14.44,12.52A6,6,0,0,0,12,12H9a6,6,0,0,0-6,6v2H16V14.49A5.16,5.16,0,0,1,14.44,12.52Z" /></g></svg>
+                }
                 <div className="flex flex-col text-left">
                     <p className="font-semibold dark:text-white transition-all duration-200 passkey-title max-w-48 whitespace-nowrap overflow-hidden text-ellipsis">{name}</p>
                     <p className="passkey-add-date text-sm text-black/40 dark:text-white/40 transition-all duration-200">Created {creationDate.toLocaleDateString()}</p>
