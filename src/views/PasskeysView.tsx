@@ -8,7 +8,6 @@ import { useTextEntryDialog } from "../ComponentContexts/TextEntryDialogContext"
 import { APIUser } from "discord-api-types/v10";
 import { bufferToBase64URLString } from "@simplewebauthn/browser";
 import loadingIcon from "../assets/loading.png";
-import aaguids from "../Types/AAGUIDCollection";
 
 export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
     const [passkeyButtonStyle, setPasskeyButtonStyle] = useState(CapsuleButtonStyle.DISABLED);
@@ -23,12 +22,12 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
         setIsPasskeyBeingCreated(false);
         if (!creationResponse) return;
 
-        let passkeyName = aaguids[creationResponse.aaguid]?.name ?? "";
+        let passkeyName = creationResponse.name;
 
         const existingNamesCount = passkeysList.filter(i => i.name === passkeyName).length;
         if (existingNamesCount > 0) {
             const proposedName = `${passkeyName} ${existingNamesCount + 1}`;
-            if (proposedName.length <= 22) {
+            if (proposedName.length <= 48) {
                 passkeyName = proposedName;
             }
             else {
