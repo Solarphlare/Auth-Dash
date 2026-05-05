@@ -23,11 +23,7 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
         setIsPasskeyBeingCreated(false);
         if (!creationResponse) return;
 
-        let passkeyName = ""
-
-        if (aaguids[creationResponse.aaguid]) {
-            passkeyName = aaguids[creationResponse.aaguid].name;
-        }
+        let passkeyName = aaguids[creationResponse.aaguid]?.name ?? "";
 
         const existingNamesCount = passkeysList.filter(i => i.name === passkeyName).length;
         if (existingNamesCount > 0) {

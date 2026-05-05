@@ -20,7 +20,7 @@ export default function TextEntryDialog() {
                 <p className="dark:text-neutral-200 leading-[1.3rem]">{body}</p>
             </div>
             <div className="px-6">
-                <input type="text" maxLength={22} tabIndex={0} value={currentValue} onChange={(e) => setCurrentValue(e.target.value)} className="w-full rounded-lg border-[rgb(180_180_180)] border-[1px] dark:border-[rgb(55_55_64)] transition duration-200 bg-neutral-400/40 dark:bg-zinc-500/40 pl-3 py-1 placeholder-neutral-500/60 dark:placeholder-neutral-400/50 dark:text-white" placeholder={placeholder} />
+                <input type="text" maxLength={48} tabIndex={0} value={currentValue} onChange={(e) => setCurrentValue(e.target.value)} className="w-full rounded-lg border-[rgb(180_180_180)] border-[1px] dark:border-[rgb(55_55_64)] transition duration-200 bg-neutral-400/40 dark:bg-zinc-500/40 pl-3 py-1 placeholder-neutral-500/60 dark:placeholder-neutral-400/50 dark:text-white" placeholder={placeholder} />
             </div>
             <div className="px-6 flex gap-2" id="dialog-button-container">
                 <button type="button" tabIndex={1} onClick={onCancel} className={`${isCancelable ? "" : "hidden"} dark:text-neutral-200 focus:outline-none lg:dark:hover:text-black bg-neutral-400/30 dark:bg-zinc-500/40 lg:bg-neutral-400/40 lg:dark:bg-zinc-500/50 py-1.5 w-full font-semibold rounded-[10px] lg:hover:scale-105 lg:hover:bg-white lg:hover:shadow-lg ease-in-out duration-300 lg:active:scale-100 active:scale-90 lg:active:shadow-none`}>Cancel</button>
