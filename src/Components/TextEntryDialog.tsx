@@ -9,6 +9,9 @@ export default function TextEntryDialog() {
         if (!isVisible) {
             setCurrentValue("");
         }
+        else {
+            setCurrentValue(initialText);
+        }
     }, [isVisible]);
 
     return (

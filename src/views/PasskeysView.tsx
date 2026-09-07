@@ -91,7 +91,7 @@ export default function PasskeysView({ userInfo }: { userInfo: APIUser}) {
                 await PublicKeyCredential.signalAllAcceptedCredentials({
                     rpId: "solarphlare.com",
                     userId: bufferToBase64URLString(new TextEncoder().encode(userInfo.id).buffer),
-                    allAcceptedCredentialIds: newPasskeysList.map(i => i.id)
+                    allAcceptedCredentialIds: [...newPasskeysList.map(i => i.id)]
                 });
             }
         }});
